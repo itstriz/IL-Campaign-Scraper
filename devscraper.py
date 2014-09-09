@@ -24,6 +24,26 @@ def get_url_contents(url):
 
     return html
 
+def split_link(link):
+    """ Pull out various parts of link item """
+    full_link = {}
+    
+    base_url = link.find('.gov/')
+    bu_pos = base_url+5
+    base_url = link[:bu_pos]
+    
+    uf_pos = link.find('/', bu_pos)
+    url_folder = link[bu_pos:uf_pos]
+        
+    rt_pos = link.find('.', uf_pos)
+    report_type = link[uf_pos+1:rt_pos]
+
+    full_link['link'] = link
+    full_link['base_url'] = base_url
+    full_link['url_folder'] = url_folder
+    full_link['report_type'] = report_type
+
+    return full_link
 
 # Declare main RSS URL
 rss_url = 'http://www.elections.il.gov/rss/SBEReportsFiledWire.aspx'
@@ -33,3 +53,6 @@ data = get_url_contents(rss_url)
 
 # Split up the individual <item> XML data
 data = get_items(data)
+
+link = data[2]['link']
+print split_link(link)
