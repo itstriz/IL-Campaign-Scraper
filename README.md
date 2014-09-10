@@ -13,7 +13,7 @@ there.  The main feed for scraping is located at:
 http://www.elections.il.gov/rss/SBEReportsFiledWire.aspx
 ```
 This feed returns the most recently updated items in an XML object 
-called <item>, like so:
+called `<item>`, like so:
 
 ```xml
 <item>
