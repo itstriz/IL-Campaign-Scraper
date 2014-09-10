@@ -39,7 +39,7 @@ def split_link(link):
     report_type = link[uf_pos+1:rt_pos]
 
     params_start = link.find('?', rt_pos)
-    params = link[params_start:]
+    params = split_params(link[params_start:])
 
     full_link['link'] = link
     full_link['base_url'] = base_url
@@ -48,6 +48,26 @@ def split_link(link):
     full_link['params'] = params
 
     return full_link
+
+def split_params(params):
+    """ Split up the params string """
+    num_params = params.count('=')
+    
+    param_list = []
+    for p in range(1, num_params+1):
+        if p == 1:
+            start_pos = params.find('?')
+            end_pos = params.find('&')
+        else:
+            start_pos = params.find('&', start_pos+1)
+            end_pos = params.find('&', start_pos+1)
+        if p == num_params:
+            end_pos = len(params)
+
+        param_item = params[start_pos:end_pos]
+        param_list.append(param_item)
+        
+    return param_list
 
 # Declare main RSS URL
 rss_url = 'http://www.elections.il.gov/rss/SBEReportsFiledWire.aspx'
