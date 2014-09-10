@@ -38,10 +38,14 @@ def split_link(link):
     rt_pos = link.find('.', uf_pos)
     report_type = link[uf_pos+1:rt_pos]
 
+    params_start = link.find('?', rt_pos)
+    params = link[params_start:]
+
     full_link['link'] = link
     full_link['base_url'] = base_url
     full_link['url_folder'] = url_folder
     full_link['report_type'] = report_type
+    full_link['params'] = params
 
     return full_link
 
@@ -55,4 +59,5 @@ data = get_url_contents(rss_url)
 data = get_items(data)
 
 link = data[2]['link']
+print 'URL: ' + link
 print split_link(link)
