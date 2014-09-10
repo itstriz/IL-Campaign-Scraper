@@ -25,3 +25,15 @@ called <item>, like so:
     <guid>http://www.elections.il.gov/CampaignDisclosure/A1List.aspx?ID=541232&amp;FiledDocID=541232&amp;ContributionType=All%20Types&amp;Archived=False#541232</guid>
 </item>
 ```
+The <item> object is mapped like so:
+
+| Descriptor | Description         |
+| ---------- | ------------------- |
+| <title>    | Organization's name |
+| <link>     | The URL that the new document is located |
+| <description> | Name of the document that was uploaded with timestamp. |
+| <pubDate>  | Timestamp of file upload. |
+| <guid>     | Unclear. It seems to be the URL again. |
+
+
+
