@@ -91,6 +91,12 @@ data = get_url_contents(rss_url)
 # Split up the individual <item> XML data
 data = get_items(data)
 
-link = data[2]['link']
-print 'URL: ' + link
-print split_link(link)
+report_types = []
+for item in data:
+    item = split_link(item['link'])
+    rt = item['report_type']
+    if rt not in report_types:
+        report_types.append(rt)
+    print split_link(item['link'])
+
+print report_types
