@@ -65,9 +65,22 @@ def split_params(params):
             end_pos = len(params)
 
         param_item = params[start_pos:end_pos]
+        param_item = split_param_item(param_item)
         param_list.append(param_item)
         
     return param_list
+
+def split_param_item(param_item):
+    """ Split up <param>=<value> into dict """
+    param_item = str(param_item)
+
+    # Strip out questions marks and ampersands
+    param_item = param_item.replace("?", "")
+    param_item = param_item.replace("&", "")
+
+    temp_dict = param_item.split("=")
+    
+    return {temp_dict[0] : temp_dict[1]}
 
 # Declare main RSS URL
 rss_url = 'http://www.elections.il.gov/rss/SBEReportsFiledWire.aspx'
