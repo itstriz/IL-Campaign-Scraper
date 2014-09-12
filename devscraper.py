@@ -1,4 +1,6 @@
 from bs4 import BeautifulSoup
+import sqlite3 as lite
+import sys
 import urllib2
 
 
@@ -82,6 +84,26 @@ def split_param_item(param_item):
     
     return {temp_dict[0] : temp_dict[1]}
 
+def create_db():
+    # start sqlite
+    con = None
+    try:
+        con = lite.connect('campaigns.db')
+        cur = con.cursor()
+        cur.execute('SELECT SQLITE_VERSION()')
+    
+        data =cur.fetchone()
+
+        print "SQLITE version: %s" % data
+
+    except lite.Error, e:
+        print "Error: %s" % e.args[0]
+        sys.exit(1)
+
+    finally:
+        if con:
+            con.close()
+
 # Declare main RSS URL
 rss_url = 'http://www.elections.il.gov/rss/SBEReportsFiledWire.aspx'
 
@@ -100,3 +122,5 @@ for item in data:
     print split_link(item['link'])
 
 print report_types
+
+create_db()
