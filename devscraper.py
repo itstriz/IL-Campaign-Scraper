@@ -51,6 +51,11 @@ def split_link(link):
 
     return full_link
 
+def scrape_report(report_type, url):
+    if report_type == 'A1List':
+        data = get_url_contents(url)
+        return data
+
 def split_params(params):
     """ Split up the params string """
     num_params = params.count('=')
@@ -113,14 +118,7 @@ data = get_url_contents(rss_url)
 # Split up the individual <item> XML data
 data = get_items(data)
 
-report_types = []
-for item in data:
-    item = split_link(item['link'])
-    rt = item['report_type']
-    if rt not in report_types:
-        report_types.append(rt)
-    print split_link(item['link'])
-
-print report_types
+test_item = split_link(data[0]['link'])
+print scrape_report(test_item['report_type'], test_item['link'])
 
 create_db()
