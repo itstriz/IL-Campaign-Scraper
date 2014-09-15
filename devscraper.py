@@ -54,6 +54,10 @@ def split_link(link):
 def scrape_report(report_type, url):
     if report_type == 'A1List':
         data = get_url_contents(url)
+        soup = BeautifulSoup(data)
+        org_name = soup.find('span', {'id': 
+'ctl00_ContentPlaceHolder1_lblName'}).text
+        print org_name
         return data
 
 def split_params(params):
@@ -119,6 +123,7 @@ data = get_url_contents(rss_url)
 data = get_items(data)
 
 test_item = split_link(data[0]['link'])
-print scrape_report(test_item['report_type'], test_item['link'])
+foo = scrape_report(test_item['report_type'], test_item['link'])
+print test_item['link']
 
 create_db()
