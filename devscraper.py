@@ -55,10 +55,18 @@ def scrape_report(report_type, url):
     if report_type == 'A1List':
         data = get_url_contents(url)
         soup = BeautifulSoup(data)
-        org_name = soup.find('span', {'id': 
-'ctl00_ContentPlaceHolder1_lblName'}).text
-        print org_name
-        return data
+        org_name = soup.find('span', {'id': 'ctl00_ContentPlaceHolder1_lblName'}).text
+        contrib_table = []
+        table = soup.find('table', {'id': 'ctl00_ContentPlaceHolder1_tblA1List'})
+        for row in table.find_all('tr'):
+            row_data = []
+            for tabledata in row.find_all('td'):
+                row_data.append((tabledata['headers'], tabledata.text))
+
+            contrib_table.append(row_data)
+        results = {'org_name': org_name,
+                   'contribs': contrib_table}
+        return results
 
 def split_params(params):
     """ Split up the params string """
@@ -122,8 +130,9 @@ data = get_url_contents(rss_url)
 # Split up the individual <item> XML data
 data = get_items(data)
 
-test_item = split_link(data[0]['link'])
+test_item = split_link(data[1]['link'])
 foo = scrape_report(test_item['report_type'], test_item['link'])
+print foo
 print test_item['link']
 
 create_db()
