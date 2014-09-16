@@ -62,8 +62,11 @@ def scrape_report(report_type, url):
             row_data = []
             for tabledata in row.find_all('td'):
                 row_data.append((tabledata['headers'], tabledata.text))
-
-            contrib_table.append(row_data)
+            
+            # filter out blank lists
+            if row_data:
+                contrib_table.append(row_data)
+        
         results = {'org_name': org_name,
                    'contribs': contrib_table}
         return results
