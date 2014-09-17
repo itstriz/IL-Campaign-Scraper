@@ -61,8 +61,9 @@ def scrape_report(report_type, url):
         for row in table.find_all('tr'):
             row_data = []
             for tabledata in row.find_all('td'):
-                row_data.append((tabledata['headers'], tabledata.text))
-            
+                td_category = str("".join(tabledata['headers']))
+                td_category = str.replace(td_category, "ctl00_ContentPlaceHolder1_th", "")
+                row_data.append((td_category, str(tabledata.text)))
             # filter out blank lists
             if row_data:
                 contrib_table.append(row_data)
@@ -133,7 +134,7 @@ data = get_url_contents(rss_url)
 # Split up the individual <item> XML data
 data = get_items(data)
 
-test_item = split_link(data[1]['link'])
+test_item = split_link(data[5]['link'])
 foo = scrape_report(test_item['report_type'], test_item['link'])
 print foo
 print test_item['link']
