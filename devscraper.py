@@ -58,6 +58,12 @@ def scrape_report(report_type, url):
         org_name = soup.find('span', {'id': 'ctl00_ContentPlaceHolder1_lblName'}).text
         contrib_table = []
         table = soup.find('table', {'id': 'ctl00_ContentPlaceHolder1_tblA1List'})
+        
+        # Get Committee ID
+        org_id_link = table.find('a')
+        org_id = org_id_link['href']
+        org_id = org_id[org_id.find('=')+1:]
+
         for row in table.find_all('tr'):
             row_data = []
             for tabledata in row.find_all('td'):
@@ -69,6 +75,7 @@ def scrape_report(report_type, url):
                 contrib_table.append(row_data)
         
         results = {'org_name': org_name,
+                   'org_id'  : org_id,
                    'contribs': contrib_table}
         return results
 
