@@ -19,6 +19,16 @@ def get_items(data):
     
     return data_items
 
+def get_report_types(data):
+    """ return a list of all report types from data chunk """
+    report_types = []
+    for item in data:
+        report_type = split_link(item['link'])['report_type']
+        if report_type not in report_types:
+            report_types.append(report_type)
+
+    return report_types
+
 def get_url_contents(url):
     """ Turn URL into plain text feed """
     response = urllib2.urlopen(url)
@@ -141,9 +151,12 @@ data = get_url_contents(rss_url)
 # Split up the individual <item> XML data
 data = get_items(data)
 
-test_item = split_link(data[5]['link'])
-foo = scrape_report(test_item['report_type'], test_item['link'])
-print foo
-print test_item['link']
+# Get report types
+report_types = get_report_types(data)
+print report_types
+#test_item = split_link(data[5]['link'])
+#foo = scrape_report(test_item['report_type'], test_item['link'])
+#print foo
+#print test_item['link']
 
 create_db()
