@@ -88,6 +88,9 @@ def scrape_report(report_type, url):
                    'org_id'  : org_id,
                    'contribs': contrib_table}
         return results
+    if report_type == 'D2Semi':
+        data = get_url_contents(url)
+        return data
 
 def split_params(params):
     """ Split up the params string """
@@ -154,9 +157,15 @@ data = get_items(data)
 # Get report types
 report_types = get_report_types(data)
 print report_types
+
+for item in data:
+    test_item = split_link(item['link'])
+    if str(test_item['report_type']) == 'D2Semi':
+        foo = scrape_report(test_item['report_type'], test_item['link'])
+        break
 #test_item = split_link(data[5]['link'])
 #foo = scrape_report(test_item['report_type'], test_item['link'])
-#print foo
+print foo
 #print test_item['link']
 
 create_db()
