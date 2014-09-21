@@ -62,9 +62,10 @@ def split_link(link):
     return full_link
 
 def scrape_report(report_type, url):
+    data = get_url_contents(url)
+    soup = BeautifulSoup(data)
+
     if report_type == 'A1List':
-        data = get_url_contents(url)
-        soup = BeautifulSoup(data)
         org_name = soup.find('span', {'id': 'ctl00_ContentPlaceHolder1_lblName'}).text
         contrib_table = []
         table = soup.find('table', {'id': 'ctl00_ContentPlaceHolder1_tblA1List'})
@@ -89,8 +90,9 @@ def scrape_report(report_type, url):
                    'contribs': contrib_table}
         return results
     if report_type == 'D2Semi':
-        data = get_url_contents(url)
-        return data
+        org_name = soup.find('span', {'id': 'ctl00_ContentPlaceHolder1_lblName'}).text
+        results = {'org_name': org_name}
+        return results
 
 def split_params(params):
     """ Split up the params string """
@@ -166,6 +168,6 @@ for item in data:
 #test_item = split_link(data[5]['link'])
 #foo = scrape_report(test_item['report_type'], test_item['link'])
 print foo
-#print test_item['link']
+print test_item['link']
 
 create_db()
