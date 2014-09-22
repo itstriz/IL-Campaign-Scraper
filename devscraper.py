@@ -1,6 +1,7 @@
 from bs4 import BeautifulSoup
 import sqlite3 as lite
 import sys
+import time
 import urllib2
 
 
@@ -90,8 +91,22 @@ def scrape_report(report_type, url):
                    'contribs': contrib_table}
         return results
     if report_type == 'D2Semi':
+        # Get committee name
         org_name = soup.find('span', {'id': 'ctl00_ContentPlaceHolder1_lblName'}).text
-        results = {'org_name': org_name}
+        
+        # Pull report dates
+        date_string = soup.find('span', {'id': 'ctl00_ContentPlaceHolder1_lblRptPd'}).text
+        split_pos = date_string.find(' to ')
+        report_start_date = date_string[0:split_pos]
+        report_end_date = date_string[split_pos+4:]
+
+        report_start_date = time.strptime(report_start_date, "%m/%d/%Y")
+        report_end_date = time.strptime(report_end_date, "%m/%d/%Y")
+
+        results = { 'org_name'          : org_name,
+                    'report_start_date' : report_start_date,
+                    'report_end_date'   : report_end_date,            
+                  }
         return results
 
 def split_params(params):
