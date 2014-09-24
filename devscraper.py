@@ -1,4 +1,5 @@
 from bs4 import BeautifulSoup
+import re
 import sqlite3 as lite
 import sys
 import time
@@ -37,6 +38,11 @@ def get_url_contents(url):
 
     return html
 
+def remove_non_numeric(s):
+    """ Takes a string or unicode and removes all non-num and non-decimal and returns an int """
+    clean_num = re.sub("[^0-9\.]", "", s)
+    return int(float(clean_num))
+    
 def split_link(link):
     """ Pull out various parts of link item """
     full_link = {}
@@ -90,6 +96,7 @@ def scrape_report(report_type, url):
                    'org_id'  : org_id,
                    'contribs': contrib_table}
         return results
+        
     if report_type == 'D2Semi':
         # Get committee name
         org_name = soup.find('span', {'id': 'ctl00_ContentPlaceHolder1_lblName'}).text
@@ -103,9 +110,17 @@ def scrape_report(report_type, url):
         report_start_date = time.strptime(report_start_date, "%m/%d/%Y")
         report_end_date = time.strptime(report_end_date, "%m/%d/%Y")
 
+        # Get Receipts Data
+        individual_itemized = remove_non_numeric( soup.find('span', {'id': 'ctl00_ContentPlaceHolder1_lblIndivContribI'}).text )
+        individual_nonitemized = remove_non_numeric( soup.find('span', {'id': 'ctl00_ContentPlaceHolder1_lblIndivContribNI'}).text )
+
         results = { 'org_name'          : org_name,
                     'report_start_date' : report_start_date,
-                    'report_end_date'   : report_end_date,            
+                    'report_end_date'   : report_end_date,
+                    'receipts'          : { 'individual_itemized'       : individual_itemized,
+                                            'individual_nonitemized'    : individual_nonitemized,
+                                            },
+                                  
                   }
         return results
 
