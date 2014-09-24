@@ -39,9 +39,9 @@ def get_url_contents(url):
     return html
 
 def remove_non_numeric(s):
-    """ Takes a string or unicode and removes all non-num and non-decimal and returns an int """
+    """ Takes a string or unicode and removes all non-num and non-decimal and returns a float """
     clean_num = re.sub("[^0-9\.]", "", s)
-    return int(float(clean_num))
+    return float(clean_num)
     
 def split_link(link):
     """ Pull out various parts of link item """
@@ -113,12 +113,15 @@ def scrape_report(report_type, url):
         # Get Receipts Data
         individual_itemized = remove_non_numeric( soup.find('span', {'id': 'ctl00_ContentPlaceHolder1_lblIndivContribI'}).text )
         individual_nonitemized = remove_non_numeric( soup.find('span', {'id': 'ctl00_ContentPlaceHolder1_lblIndivContribNI'}).text )
-
+        transfers_itemized = remove_non_numeric( soup.find('span', {'id': 'ctl00_ContentPlaceHolder1_lblXferInI'}).text )
+        transfers_nonitemized = remove_non_numeric( soup.find('span', {'id': 'ctl00_ContentPlaceHolder1_lblXferInNI'}).text )
         results = { 'org_name'          : org_name,
                     'report_start_date' : report_start_date,
                     'report_end_date'   : report_end_date,
                     'receipts'          : { 'individual_itemized'       : individual_itemized,
                                             'individual_nonitemized'    : individual_nonitemized,
+                                            'transfers_itemized'        : transfers_itemized,
+                                            'transfers_nonitemized'     : transfers_nonitemized,
                                             },
                                   
                   }
