@@ -35,5 +35,12 @@ The `<item>` object is mapped like so:
 | `<pubDate>`  | Timestamp of file upload. |
 | `<guid>`     | Unclear. It seems to be the URL again. |
 
+## Report Examples
+
+### A1List
+### D2Quarterly
+### CDPdfViewer
+### D2Semi
+http://www.elections.il.gov/CampaignDisclosure/D2Semi.aspx?id=542401
 
 
