@@ -117,7 +117,8 @@ def scrape_report(report_type, url):
         transfers_nonitemized = remove_non_numeric( soup.find('span', {'id': 'ctl00_ContentPlaceHolder1_lblXferInNI'}).text )
         loans_itemized = remove_non_numeric( soup.find('span', {'id': 'ctl00_ContentPlaceHolder1_lblLoanRcvI'}).text )
         loans_nonitemized = remove_non_numeric( soup.find('span', {'id': 'ctl00_ContentPlaceHolder1_lblLoanRcvNI'}).text )
-        
+        other_itemized = remove_non_numeric( soup.find('span', {'id': 'ctl00_ContentPlaceHolder1_lblOtherRctI'}).text )
+        other_nonitemized = remove_non_numeric( soup.find('span', {'id': 'ctl00_ContentPlaceHolder1_lblOtherRctNI'}).text )
         
         results = { 'org_name'          : org_name,
                     'report_start_date' : report_start_date,
@@ -128,6 +129,8 @@ def scrape_report(report_type, url):
                                             'transfers_nonitemized'     : transfers_nonitemized,
                                             'loans_itemized'            : loans_itemized,
                                             'loans_nonitemized'         : loans_nonitemized,
+                                            'other_itemized'            : other_itemized,
+                                            'other_nonitemized'         : other_nonitemized,
                                             },
                                   
                   }
