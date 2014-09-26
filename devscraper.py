@@ -121,6 +121,11 @@ def scrape_report(report_type, url):
         other_nonitemized = remove_non_numeric( soup.find('span', {'id': 'ctl00_ContentPlaceHolder1_lblOtherRctNI'}).text )
         total_receipts = remove_non_numeric( soup.find('span', {'id': 'ctl00_ContentPlaceHolder1_lblTotalReceipts'}).text )
         
+        # Get In Kind
+        in_kind_itemized = remove_non_numeric( soup.find('span', {'id': 'ctl00_ContentPlaceHolder1_lblInKindI'}).text )
+        in_kind_nonitemized = remove_non_numeric( soup.find('span', {'id': 'ctl00_ContentPlaceHolder1_lblInKindNI'}).text )
+        in_kine_total = remove_non_numeric( soup.find('span', {'id': 'ctl00_ContentPlaceHolder1_lblTotalInKind'}).text )
+        
         results = { 'org_name'          : org_name,
                     'report_start_date' : report_start_date,
                     'report_end_date'   : report_end_date,
@@ -134,6 +139,10 @@ def scrape_report(report_type, url):
                                             'other_nonitemized'         : other_nonitemized,
                                             'total_receipts'            : total_receipts,
                                             },
+                    'in_kind_contribs'  : { 'in_kind_itemized'          : in_kind_itemized,
+                                            'in_kind_nonitemized'       : in_kind_nonitemized,
+                                            'in_kine_total'             : in_kine_total,
+                                          },
                                   
                   }
         return results
