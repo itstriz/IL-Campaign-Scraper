@@ -126,6 +126,10 @@ def scrape_report(report_type, url):
         in_kind_nonitemized = remove_non_numeric( soup.find('span', {'id': 'ctl00_ContentPlaceHolder1_lblInKindNI'}).text )
         in_kine_total = remove_non_numeric( soup.find('span', {'id': 'ctl00_ContentPlaceHolder1_lblTotalInKind'}).text )
         
+        # Get expenses
+        transfer_out_itemized = remove_non_numeric( soup.find('span', {'id': 'ctl00_ContentPlaceHolder1_lblXferOutI'}).text )
+        transfer_out_nonitemized = remove_non_numeric( soup.find('span', {'id': 'ctl00_ContentPlaceHolder1_lblXferOutNI'}).text )
+        
         results = { 'org_name'          : org_name,
                     'report_start_date' : report_start_date,
                     'report_end_date'   : report_end_date,
@@ -142,6 +146,9 @@ def scrape_report(report_type, url):
                     'in_kind_contribs'  : { 'in_kind_itemized'          : in_kind_itemized,
                                             'in_kind_nonitemized'       : in_kind_nonitemized,
                                             'in_kine_total'             : in_kine_total,
+                                          },
+                    'expenses'          : { 'transfer_out_itemized'     : transfer_out_itemized,
+                                            'transfer_out_nonitemized'  : transfer_out_nonitemized,
                                           },
                                   
                   }
