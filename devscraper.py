@@ -18,7 +18,7 @@ def get_items(data):
                         'guid':             data_item.guid.text
                     }
         data_items.append(item_dict)
-    
+
     return data_items
 
 def get_report_types(data):
@@ -42,18 +42,18 @@ def remove_non_numeric(s):
     """ Takes a string or unicode and removes all non-num and non-decimal and returns a float """
     clean_num = re.sub("[^0-9\.]", "", s)
     return float(clean_num)
-    
+
 def split_link(link):
     """ Pull out various parts of link item """
     full_link = {}
-    
+
     base_url = link.find('.gov/')
     bu_pos = base_url+5
     base_url = link[:bu_pos]
-    
+
     uf_pos = link.find('/', bu_pos)
     url_folder = link[bu_pos:uf_pos]
-        
+
     rt_pos = link.find('.', uf_pos)
     report_type = link[uf_pos+1:rt_pos]
 
@@ -76,7 +76,7 @@ def scrape_report(report_type, url):
         org_name = soup.find('span', {'id': 'ctl00_ContentPlaceHolder1_lblName'}).text
         contrib_table = []
         table = soup.find('table', {'id': 'ctl00_ContentPlaceHolder1_tblA1List'})
-        
+
         # Get Committee ID
         org_id_link = table.find('a')
         org_id = org_id_link['href']
@@ -91,16 +91,16 @@ def scrape_report(report_type, url):
             # filter out blank lists
             if row_data:
                 contrib_table.append(row_data)
-        
+
         results = {'org_name': org_name,
                    'org_id'  : org_id,
                    'contribs': contrib_table}
         return results
-        
+
     if report_type == 'D2Semi':
         # Get committee name
         org_name = soup.find('span', {'id': 'ctl00_ContentPlaceHolder1_lblName'}).text
-        
+
         # Pull report dates
         date_string = soup.find('span', {'id': 'ctl00_ContentPlaceHolder1_lblRptPd'}).text
         split_pos = date_string.find(' to ')
@@ -115,21 +115,23 @@ def scrape_report(report_type, url):
         individual_nonitemized = remove_non_numeric( soup.find('span', {'id': 'ctl00_ContentPlaceHolder1_lblIndivContribNI'}).text )
         transfers_itemized = remove_non_numeric( soup.find('span', {'id': 'ctl00_ContentPlaceHolder1_lblXferInI'}).text )
         transfers_nonitemized = remove_non_numeric( soup.find('span', {'id': 'ctl00_ContentPlaceHolder1_lblXferInNI'}).text )
-        loans_itemized = remove_non_numeric( soup.find('span', {'id': 'ctl00_ContentPlaceHolder1_lblLoanRcvI'}).text )
-        loans_nonitemized = remove_non_numeric( soup.find('span', {'id': 'ctl00_ContentPlaceHolder1_lblLoanRcvNI'}).text )
+        loans_received_itemized = remove_non_numeric( soup.find('span', {'id': 'ctl00_ContentPlaceHolder1_lblLoanRcvI'}).text )
+        loans_received_nonitemized = remove_non_numeric( soup.find('span', {'id': 'ctl00_ContentPlaceHolder1_lblLoanRcvNI'}).text )
         other_itemized = remove_non_numeric( soup.find('span', {'id': 'ctl00_ContentPlaceHolder1_lblOtherRctI'}).text )
         other_nonitemized = remove_non_numeric( soup.find('span', {'id': 'ctl00_ContentPlaceHolder1_lblOtherRctNI'}).text )
         total_receipts = remove_non_numeric( soup.find('span', {'id': 'ctl00_ContentPlaceHolder1_lblTotalReceipts'}).text )
-        
+
         # Get In Kind
         in_kind_itemized = remove_non_numeric( soup.find('span', {'id': 'ctl00_ContentPlaceHolder1_lblInKindI'}).text )
         in_kind_nonitemized = remove_non_numeric( soup.find('span', {'id': 'ctl00_ContentPlaceHolder1_lblInKindNI'}).text )
         in_kine_total = remove_non_numeric( soup.find('span', {'id': 'ctl00_ContentPlaceHolder1_lblTotalInKind'}).text )
-        
+
         # Get expenses
         transfer_out_itemized = remove_non_numeric( soup.find('span', {'id': 'ctl00_ContentPlaceHolder1_lblXferOutI'}).text )
         transfer_out_nonitemized = remove_non_numeric( soup.find('span', {'id': 'ctl00_ContentPlaceHolder1_lblXferOutNI'}).text )
-        
+        loans_made_itemized = remove_non_numeric( soup.find('span', {'id': 'ctl00_ContentPlaceHolder1_lblLoanMadeI'}).text )
+        loans_made_nonitemized = remove_non_numeric( soup.find('span', {'id': 'ctl00_ContentPlaceHolder1_lblLoanMadeNI'}).text )
+
         results = { 'org_name'          : org_name,
                     'report_start_date' : report_start_date,
                     'report_end_date'   : report_end_date,
@@ -137,8 +139,8 @@ def scrape_report(report_type, url):
                                             'individual_nonitemized'    : individual_nonitemized,
                                             'transfers_itemized'        : transfers_itemized,
                                             'transfers_nonitemized'     : transfers_nonitemized,
-                                            'loans_itemized'            : loans_itemized,
-                                            'loans_nonitemized'         : loans_nonitemized,
+                                            'loans_received_itemized'   : loans_received_itemized,
+                                            'loans_received_nonitemized': loans_received_nonitemized,
                                             'other_itemized'            : other_itemized,
                                             'other_nonitemized'         : other_nonitemized,
                                             'total_receipts'            : total_receipts,
@@ -149,15 +151,17 @@ def scrape_report(report_type, url):
                                           },
                     'expenses'          : { 'transfer_out_itemized'     : transfer_out_itemized,
                                             'transfer_out_nonitemized'  : transfer_out_nonitemized,
+                                            'loans_made_itemized'				: loans_made_itemized,
+                                            'loans_made_nonitemized'		: loans_made_nonitemized,
                                           },
-                                  
+
                   }
         return results
 
 def split_params(params):
     """ Split up the params string """
     num_params = params.count('=')
-    
+
     param_list = []
     for p in range(1, num_params+1):
         if p == 1:
@@ -172,7 +176,7 @@ def split_params(params):
         param_item = params[start_pos:end_pos]
         param_item = split_param_item(param_item)
         param_list.append(param_item)
-        
+
     return param_list
 
 def split_param_item(param_item):
@@ -184,7 +188,7 @@ def split_param_item(param_item):
     param_item = param_item.replace("&", "")
 
     temp_dict = param_item.split("=")
-    
+
     return {temp_dict[0] : temp_dict[1]}
 
 def create_db():
@@ -194,7 +198,7 @@ def create_db():
         con = lite.connect('campaigns.db')
         cur = con.cursor()
         cur.execute('SELECT SQLITE_VERSION()')
-    
+
         data =cur.fetchone()
 
         print "SQLITE version: %s" % data
