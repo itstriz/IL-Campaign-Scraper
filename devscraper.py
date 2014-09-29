@@ -135,6 +135,10 @@ def scrape_report(report_type, url):
         expenditures_nonitemized = remove_non_numeric(soup.find('span', {'id': 'ctl00_ContentPlaceHolder1_lblExpendNI'}).text )
         total_expenses = remove_non_numeric( soup.find('span', {'id': 'ctl00_ContentPlaceHolder1_lblTotalExpend'}).text )
 
+        # Get debts / obligations
+        debts_itemized = remove_non_numeric( soup.find('span', {'id': 'ctl00_ContentPlaceHolder1_lblDebtsI'}).text )
+        debts_nonitemized = remove_non_numeric( soup.find('span', {'id': 'ctl00_ContentPlaceHolder1_lblDebtsNI'}).text )
+        total_debts = remove_non_numeric( soup.find('span', {'id': 'ctl00_ContentPlaceHolder1_lblTotalDebts'}).text )
         results = { 'org_name'          : org_name,
                     'report_start_date' : report_start_date,
                     'report_end_date'   : report_end_date,
@@ -160,6 +164,10 @@ def scrape_report(report_type, url):
                                             'expenditures_nonitemized'	: expenditures_nonitemized,
                                             'total_expenses'						: total_expenses,
                                           },
+                    'debts'             : { 'debts_itemized'            : debts_itemized,
+                                            'debts_nonitemized'         : debts_nonitemized,
+                                            'total_debts'               : total_debts,
+                                          }
 
                   }
         return results
