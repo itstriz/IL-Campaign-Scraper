@@ -142,6 +142,7 @@ def scrape_report(report_type, url):
         
         # Get funds balance
         beg_funds_available = remove_non_numeric( soup.find('span', {'id': 'ctl00_ContentPlaceHolder1_lblBegFundsAvail'}).text )
+        total_receipts_total = remove_non_numeric( soup.find('span', {'id': 'ctl00_ContentPlaceHolder1_lblTotalReceiptsTot'}).text )
         
         # Get table links
         table = soup.find('table', {'id': 'table1'})
@@ -179,6 +180,8 @@ def scrape_report(report_type, url):
                                             'total_debts'               : total_debts,
                                           },
                     'funds_balance'     : { 'beg_funds_available'       : beg_funds_available,
+                                            'total_receipts_total'      : total_receipts_total,
+                                            
                                           },
                     'table_links'       : table_links,
 
