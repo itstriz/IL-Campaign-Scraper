@@ -146,7 +146,7 @@ def scrape_report(report_type, url):
         funds_subtotal = remove_non_numeric( soup.find('span', {'id': 'ctl00_ContentPlaceHolder1_lblSubtotal'}).text )
         total_expenditures_total = remove_non_numeric( soup.find('span', {'id': 'ctl00_ContentPlaceHolder1_lblTotalExpendTot'}).text )
         end_funds_available = remove_non_numeric( soup.find('span', {'id': 'ctl00_ContentPlaceHolder1_lblEndFundsAvail'}).text )
-        
+        total_investment = remove_non_numeric( soup.find('span', {'id': 'ctl00_ContentPlaceHolder1_lblTotalInvest'}).text )
         
         # Get table links
         table = soup.find('table', {'id': 'table1'})
@@ -188,6 +188,7 @@ def scrape_report(report_type, url):
                                             'subtotal'                  : funds_subtotal,
                                             'total_expenditures_total'  : total_expenditures_total,
                                             'end_funds_available'       : end_funds_available,
+                                            'total_investment'          : total_investment,
                                           },
                     'table_links'       : table_links,
 
