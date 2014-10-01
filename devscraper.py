@@ -102,6 +102,7 @@ def scrape_report(report_type, url):
         
         """ 
         http://www.unixuser.org/~euske/python/pdfminer/index.html#pdf2txt
+        http://mylifelogontheweb.blogspot.com/2009/05/scraping-pdfs-in-python.html
         Above url should be used to collect committee ID from the pdf report scraped below
         """
         doc_id_url = str(url)
