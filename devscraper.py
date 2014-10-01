@@ -98,6 +98,12 @@ def scrape_report(report_type, url):
         return results
 
     if report_type == 'D2Semi':
+        # Check PDF report
+        doc_id_url = str(url)
+        doc_id = url[url.find('id=')+3:]
+        pdf_url = "http://www.elections.il.gov/CampaignDisclosure/CDPdfViewer.aspx?FiledDocID=%s&DocType=D2&ReportType=Final&DocPath=AllSchedules.rpt" % (doc_id)
+        print pdf_url
+        
         # Get committee name
         org_name = soup.find('span', {'id': 'ctl00_ContentPlaceHolder1_lblName'}).text
 
@@ -266,8 +272,7 @@ for item in data:
     if str(test_item['report_type']) == 'D2Semi':
         foo = scrape_report(test_item['report_type'], test_item['link'])
         break
-#test_item = split_link(data[5]['link'])
-#foo = scrape_report(test_item['report_type'], test_item['link'])
+
 print foo
 print test_item['link']
 
