@@ -99,6 +99,11 @@ def scrape_report(report_type, url):
 
     if report_type == 'D2Semi':
         # Check PDF report
+        
+        """ 
+        http://www.unixuser.org/~euske/python/pdfminer/index.html#pdf2txt
+        Above url should be used to collect committee ID from the pdf report scraped below
+        """
         doc_id_url = str(url)
         doc_id = url[url.find('id=')+3:]
         pdf_url = "http://www.elections.il.gov/CampaignDisclosure/CDPdfViewer.aspx?FiledDocID=%s&DocType=D2&ReportType=Final&DocPath=AllSchedules.rpt" % (doc_id)
