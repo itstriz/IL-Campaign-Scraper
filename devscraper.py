@@ -209,36 +209,13 @@ def scrape_report(report_type, url):
 
 def split_params(params):
     """ Split up the params string """
-    num_params = params.count('=')
-
     param_list = []
-    for p in range(1, num_params+1):
-        if p == 1:
-            start_pos = params.find('?')
-            end_pos = params.find('&')
-        else:
-            start_pos = params.find('&', start_pos+1)
-            end_pos = params.find('&', start_pos+1)
-        if p == num_params:
-            end_pos = len(params)
-
-        param_item = params[start_pos:end_pos]
-        param_item = split_param_item(param_item)
-        param_list.append(param_item)
+    for p in params.split('&'):
+        p = p.replace("?", "")
+        temp_dict = p.split("=")
+        param_list.append({temp_dict[0]: temp_dict[1]})
 
     return param_list
-
-def split_param_item(param_item):
-    """ Split up <param>=<value> into dict """
-    param_item = str(param_item)
-
-    # Strip out questions marks and ampersands
-    param_item = param_item.replace("?", "")
-    param_item = param_item.replace("&", "")
-
-    temp_dict = param_item.split("=")
-
-    return {temp_dict[0] : temp_dict[1]}
 
 def create_db():
     # start sqlite
